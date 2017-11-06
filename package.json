@@ -1,0 +1,82 @@
+{
+  "name": "altair",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "decode-google-map-polyline": "^1.0.1",
+    "firebase": "^4.6.1",
+    "geofire": "^4.1.2",
+    "keycode": "^2.1.9",
+    "localforage": "^1.5.3",
+    "lodash": "^4.17.4",
+    "material-ui": "next",
+    "material-ui-icons": "^1.0.0-beta.17",
+    "query-string": "^5.0.1",
+    "react": "^16.0.0",
+    "react-app-rewired": "^1.3.3",
+    "react-dom": "^16.0.0",
+    "react-google-maps": "^9.2.0",
+    "react-lottie": "^0.2.2",
+    "react-redux": "^5.0.6",
+    "react-redux-firebase": "next",
+    "react-retina-image": "^2.0.4",
+    "react-router-dom": "^4.2.2",
+    "react-scripts": "^1.0.14",
+    "react-worker-dom": "^2.0.0-alpha.6",
+    "redux": "^3.7.2",
+    "redux-persist": "^4.10.1",
+    "redux-saga": "^0.16.0",
+    "redux-thunk": "^2.2.0",
+    "styled-components": "^2.2.2",
+    "superagent": "^3.8.0"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --no-ignore --fix",
+      "git add"
+    ],
+    "*.json": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "scripts": {
+    "precommit": "lint-staged",
+    "prepush": "yarn test",
+    "lint": "eslint --ignore-path .eslintignore --ignore-pattern \"!**/.*\" . && stylelint \"./src/**/*.js\"",
+    "fix": "eslint --ignore-path .eslintignore --ignore-pattern \"!**/.*\" --fix .",
+    "build": "node ./setup && react-scripts build && npm run delete-maps",
+    "delete-maps": "yarn run delete-map-files && yarn run delete-references-to-map-files",
+    "delete-map-files": "find ./build -name '*.map' -delete",
+    "delete-references-to-map-files": "find ./build -regex '.*\\.\\(js\\|css\\)' -exec sed -i -E '\\/[\\*\\/]#\\ssourceMappingURL=main(\\.[0-9a-f]+)?\\.(css|js)\\.map(\\*\\/)?/g' {} +",
+    "test": "node ./setup && react-scripts test --env=jsdom",
+    "deploy": "node ./setup && react-scripts build && npm run delete-maps && firebase deploy",
+    "start": "node ./setup && react-scripts start"
+  },
+  "devDependencies": {
+    "add": "^2.0.6",
+    "babel-plugin-module-resolver": "^2.7.1",
+    "babel-plugin-styled-components": "^1.3.0",
+    "babel-plugin-transform-export-extensions": "^6.22.0",
+    "babel-polyfill": "^6.26.0",
+    "dotenv": "^4.0.0",
+    "dotenv-webpack": "^1.5.4",
+    "eslint": "^4.10.0",
+    "eslint-config-prettier": "^2.6.0",
+    "eslint-plugin-flowtype": "^2.39.1",
+    "eslint-plugin-prettier": "^2.3.1",
+    "flow-bin": "^0.57.3",
+    "grpc": "^1.7.1",
+    "husky": "^0.14.3",
+    "lint-staged": "^4.3.0",
+    "pre-render": "^0.1.0-preview.2",
+    "prettier": "^1.7.4",
+    "stylelint": "^8.0.0",
+    "stylelint-config-primer": "^2.0.1",
+    "stylelint-config-standard": "^17.0.0",
+    "stylelint-config-styled-components-processor": "^0.1.1",
+    "stylelint-order": "^0.6.0",
+    "stylelint-processor-styled-components": "^0.4.0",
+    "yarn": "^1.2.1"
+  }
+}

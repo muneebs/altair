@@ -1,0 +1,35 @@
+{
+  "extends": [
+    "plugin:flowtype/recommended"
+  ],
+  "env": {
+    "browser": false,
+    "node": true,
+    "es6": true
+  },
+  "plugins": [
+    "react",
+    "prettier",
+    "flowtype"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true,
+      "experimentalObjectRestSpread": true
+    }
+  },
+  "rules": {
+    //
+    // prettier
+    //
+    "prettier/prettier": [
+      "error",
+      {
+        "singleQuote" : true,
+        "bracketSpacing" : true
+      }
+    ]
+  }
+}
