@@ -32,26 +32,20 @@
     "superagent": "^3.8.0"
   },
   "lint-staged": {
-    "*.js": [
-      "eslint --no-ignore --fix",
-      "git add"
-    ],
-    "*.json": [
-      "prettier --write",
-      "git add"
-    ]
+    "*.js": ["eslint --no-ignore --fix", "git add"],
+    "*.json": ["prettier --write", "git add"]
   },
   "scripts": {
     "precommit": "lint-staged",
     "prepush": "yarn test",
-    "lint": "eslint --ignore-path .eslintignore --ignore-pattern \"!**/.*\" . && stylelint \"./src/**/*.js\"",
-    "fix": "eslint --ignore-path .eslintignore --ignore-pattern \"!**/.*\" --fix .",
-    "build": "node ./setup && react-scripts build && npm run delete-maps",
-    "delete-maps": "yarn run delete-map-files && yarn run delete-references-to-map-files",
-    "delete-map-files": "find ./build -name '*.map' -delete",
-    "delete-references-to-map-files": "find ./build -regex '.*\\.\\(js\\|css\\)' -exec sed -i -E '\\/[\\*\\/]#\\ssourceMappingURL=main(\\.[0-9a-f]+)?\\.(css|js)\\.map(\\*\\/)?/g' {} +",
+    "lint":
+      "eslint --ignore-path .eslintignore --ignore-pattern \"!**/.*\" . && stylelint \"./src/**/*.js\"",
+    "fix":
+      "eslint --ignore-path .eslintignore --ignore-pattern \"!**/.*\" --fix .",
+    "build": "node ./setup && react-scripts build",
     "test": "node ./setup && react-scripts test --env=jsdom",
-    "deploy": "node ./setup && react-scripts build && npm run delete-maps && firebase deploy",
+    "deploy":
+      "node ./setup && react-scripts build && npm run delete-maps && firebase deploy",
     "start": "node ./setup && react-scripts start"
   },
   "devDependencies": {

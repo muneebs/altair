@@ -76,6 +76,14 @@ npm install
 npm start
 ```
 
+# Build
+
+Create a production-ready optimized build
+
+```
+export GENERATE_SOURCEMAP=false && yarn build
+```
+
 # Deploy
 
 if you have firebase configured, simply run:
