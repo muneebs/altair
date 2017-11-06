@@ -76,6 +76,12 @@ npm install
 npm start
 ```
 
+Setup firebase functions
+
+```
+cd functions && npm install
+```
+
 # Build
 
 Create a production-ready optimized build
