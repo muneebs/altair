@@ -15,8 +15,7 @@
  */
 const functions = require('firebase-functions');
 const algoliasearch = require('algoliasearch');
-const vision = require('@google-cloud/vision')();
-const gcs = require('@google-cloud/storage')();
+const request = require('superagent');
 
 // [START init_algolia]
 // Initialize Algolia, requires installing Algolia dependencies:
@@ -26,6 +25,7 @@ const gcs = require('@google-cloud/storage')();
 const ALGOLIA_ID = functions.config().algolia.app_id;
 const ALGOLIA_ADMIN_KEY = functions.config().algolia.api_key;
 const ALGOLIA_SEARCH_KEY = functions.config().algolia.search_key;
+const GOOGLE_API_KEY = functions.config().google.api_key;
 
 const ALGOLIA_INDEX_NAME = 'customers';
 const client = algoliasearch(ALGOLIA_ID, ALGOLIA_ADMIN_KEY);
@@ -35,6 +35,40 @@ const client = algoliasearch(ALGOLIA_ID, ALGOLIA_ADMIN_KEY);
 exports.onCustomerCreated = functions.firestore
   .document('customers/{customerId}')
   .onCreate(event => {
+    const address = event.data.data().address;
+    if (typeof address === 'string') {
+      // geocode the address
+      request
+        .get('https://maps.googleapis.com/maps/api/geocode/json')
+        .type('application/json')
+        .query({ components: 'country:ZA' })
+        .query({ sensor: false })
+        .query({ address: address })
+        .query({ key: GOOGLE_API_KEY })
+        .then(response => {
+          return response.body;
+        })
+        .then(({ results }) => {
+          // only take the first result
+          const result = results[0];
+          const myAddresss = {
+            address: result.formatted_address,
+            location: {
+              latitude: result.geometry.location.lat,
+              longitude: result.geometry.location.lng
+            }
+          };
+          event.data.ref.set(
+            {
+              address: myAddresss
+            },
+            { merge: true }
+          );
+        })
+        .catch(error => {
+          console.log('unable to run geocode', error);
+        });
+    }
     event.data.ref.set(
       {
         updatedAt: new Date(),
@@ -121,9 +155,10 @@ app.get('/', (req, res) => {
   // https://www.algolia.com/doc/guides/security/api-keys/#generating-api-keys
   const params = {
     // This filter ensures that only documents where owner == createdBy will be readable
-    filters: `createdBy:${req.user.user_id}`,
+    filters: `_tags:user_${req.user.user_id} AND createdBy = ${req.user
+      .user_id}`,
     // We also proxy the user_id as a unique token for this key.
-    userToken: req.user.user_id
+    userToken: `user_${req.user.user_id}`
   };
 
   // Call the Algolia API to generate a unique key based on our search key

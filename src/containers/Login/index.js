@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2017-present Muneeb Samuels. All Rights Reserved. See License.txt for license information.
+ */
+
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';

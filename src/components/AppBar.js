@@ -1,11 +1,15 @@
+/*
+ * Copyright (c) 2017-present Muneeb Samuels. All Rights Reserved. See License.txt for license information.
+ */
+
 import React, { PureComponent } from 'react';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
-import Typography from 'material-ui/Typography';
 import AccountCircle from 'material-ui-icons/AccountCircle';
 import Button from 'material-ui/Button';
 import Menu, { MenuItem } from 'material-ui/Menu';
 import PropTypes from 'prop-types';
+import logo from '../assets/logo.svg';
 
 class SDAppBar extends PureComponent {
   state = {
@@ -26,16 +30,10 @@ class SDAppBar extends PureComponent {
     return (
       <AppBar position="static" className={classes.appBar}>
         <Toolbar>
-          <Typography
-            type="title"
-            color="inherit"
-            noWrap
-            className={classes.flex}
-          >
-            {this.props.title}
-          </Typography>
+          <img alt="logo" src={logo} className={classes.logo} />
+          <div className={classes.flex} />
           <Button
-            color="contrast"
+            className={classes.profileButton}
             aria-owns={this.state.open ? 'simple-menu' : null}
             aria-haspopup="true"
             onClick={this.handleClick}
@@ -51,8 +49,8 @@ class SDAppBar extends PureComponent {
             open={this.state.open}
             onRequestClose={this.handleRequestClose}
           >
-            <MenuItem onClick={this.handleRequestClose}>Profile</MenuItem>
-            <MenuItem onClick={this.handleRequestClose}>My account</MenuItem>
+            {/*<MenuItem onClick={this.handleRequestClose}>Profile</MenuItem>*/}
+            {/*<MenuItem onClick={this.handleRequestClose}>My account</MenuItem>*/}
             <MenuItem onClick={this.props.handleSignOut}>Logout</MenuItem>
           </Menu>
         </Toolbar>
@@ -62,7 +60,6 @@ class SDAppBar extends PureComponent {
 }
 
 SDAppBar.propTypes = {
-  title: PropTypes.string.isRequired,
   classes: PropTypes.object.isRequired,
   user: PropTypes.object.isRequired,
   handleSignOut: PropTypes.func.isRequired

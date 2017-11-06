@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2017-present Muneeb Samuels. All Rights Reserved. See License.txt for license information.
+ */
+
 import React from 'react';
 import registerServiceWorker from './registerServiceWorker';
 import ReactDOM from 'react-dom';
@@ -24,7 +28,8 @@ const store = configureStore(
     useFirestoreForProfile: true
   },
   {
-    appId: process.env.REACT_APP_ALGOLIA_APP_ID
+    appId: process.env.REACT_APP_ALGOLIA_APP_ID,
+    searchKey: process.env.REACT_APP_ALGOLIA_SEARCH_KEY
   }
 );
 

@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2017-present Muneeb Samuels. All Rights Reserved. See License.txt for license information.
+ */
+
 import React, { Component } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
@@ -19,14 +23,8 @@ import Checkbox from 'material-ui/Checkbox';
 import IconButton from 'material-ui/IconButton';
 import Tooltip from 'material-ui/Tooltip';
 import DeleteIcon from 'material-ui-icons/Delete';
-import FilterListIcon from 'material-ui-icons/FilterList';
-
-let counter = 0;
-
-function createData(name, calories, fat, carbs, protein) {
-  counter += 1;
-  return { id: counter, name, calories, fat, carbs, protein };
-}
+import AddIcon from 'material-ui-icons/Add';
+import moment from 'moment';
 
 const columnData = [
   {
@@ -36,7 +34,7 @@ const columnData = [
     label: 'First Name'
   },
   { id: 'surname', numeric: true, disablePadding: false, label: 'Surname' },
-  { id: 'dob', numeric: true, disablePadding: false, label: 'Date of birth' },
+  { id: 'dob', numeric: true, disablePadding: true, label: 'Date of birth' },
   { id: 'idNumber', numeric: true, disablePadding: false, label: 'ID Number' },
   { id: 'address', numeric: true, disablePadding: false, label: 'Address' }
 ];
@@ -125,11 +123,54 @@ const toolbarStyles = theme => ({
   },
   title: {
     flex: '0 0 auto'
+  },
+  searchContainer: {
+    position: 'relative',
+    background: 'rgba(255, 255, 255, 0.15)',
+    borderRadius: '2px'
+  },
+  searchIconContainer: {
+    width: '72px',
+    height: '100%',
+    display: 'flex',
+    position: 'absolute',
+    alignItems: 'center',
+    pointerEvents: 'none',
+    justifyContent: 'center'
+  },
+  searchIcon: {
+    fill: 'currentColor',
+    width: '24px',
+    height: '24px',
+    display: 'inline-block',
+    transition: 'fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+    userSelect: 'none',
+    flexShrink: 0
+  },
+  addressAutoComplete: {
+    position: 'relative',
+    display: 'inline-block',
+    direction: 'ltr'
+  },
+  searchInput: {
+    font: 'inherit',
+    color: 'inherit',
+    border: '1px solid #ccc',
+    margin: 0,
+    padding: '8px 8px 8px 72px',
+    display: 'block',
+    background: 'none',
+    whiteSpace: 'normal',
+    userSelect: 'text',
+    verticalAlign: 'middle'
+  },
+  searchProvider: {
+    paddingRight: 12
   }
 });
 
 let EnhancedTableToolbar = props => {
-  const { numSelected, classes } = props;
+  const { numSelected, selected, classes } = props;
 
   return (
     <Toolbar
@@ -145,17 +186,60 @@ let EnhancedTableToolbar = props => {
         )}
       </div>
       <div className={classes.spacer} />
+      <a
+        href="https://www.algolia.com"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <img
+          className={classes.searchProvider}
+          alt="Search by Algolia"
+          height={40}
+          src="https://www.algolia.com/static_assets/images/press/downloads/algolia-logo-light.svg"
+        />
+      </a>
+      <div className={classes.searchContainer}>
+        <div className={classes.searchIconContainer}>
+          <svg
+            className={classes.searchIcon}
+            focusable="false"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+          </svg>
+        </div>
+        <span
+          style={{
+            position: 'relative',
+            display: 'inline-block'
+          }}
+        >
+          <input
+            className={classes.searchInput}
+            onChange={props.handleOnSearchChange}
+          />
+        </span>
+      </div>
       <div className={classes.actions}>
         {numSelected > 0 ? (
           <Tooltip title="Delete">
-            <IconButton aria-label="Delete">
+            <IconButton
+              aria-label="Delete"
+              onClick={() => {
+                props.deleteSelected(selected);
+              }}
+            >
               <DeleteIcon />
             </IconButton>
           </Tooltip>
         ) : (
-          <Tooltip title="Filter list">
-            <IconButton aria-label="Filter list">
-              <FilterListIcon />
+          <Tooltip title="Create new customer">
+            <IconButton
+              aria-label="Create new customer"
+              onClick={props.handleAddClick}
+            >
+              <AddIcon />
             </IconButton>
           </Tooltip>
         )}
@@ -166,7 +250,11 @@ let EnhancedTableToolbar = props => {
 
 EnhancedTableToolbar.propTypes = {
   classes: PropTypes.object.isRequired,
-  numSelected: PropTypes.number.isRequired
+  numSelected: PropTypes.number.isRequired,
+  selected: PropTypes.array.isRequired,
+  handleAddClick: PropTypes.func.isRequired,
+  deleteSelected: PropTypes.func.isRequired,
+  handleOnSearchChange: PropTypes.func.isRequired
 };
 
 EnhancedTableToolbar = withStyles(toolbarStyles)(EnhancedTableToolbar);
@@ -192,21 +280,6 @@ class EnhancedTable extends React.Component {
       order: 'asc',
       orderBy: 'name',
       selected: [],
-      data: [
-        createData('Cupcake', 305, 3.7, 67, 4.3),
-        createData('Donut', 452, 25.0, 51, 4.9),
-        createData('Eclair', 262, 16.0, 24, 6.0),
-        createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-        createData('Gingerbread', 356, 16.0, 49, 3.9),
-        createData('Honeycomb', 408, 3.2, 87, 6.5),
-        createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-        createData('Jelly Bean', 375, 0.0, 94, 0.0),
-        createData('KitKat', 518, 26.0, 65, 7.0),
-        createData('Lollipop', 392, 0.2, 98, 0.0),
-        createData('Marshmallow', 318, 0, 81, 2.0),
-        createData('Nougat', 360, 19.0, 9, 37.0),
-        createData('Oreo', 437, 18.0, 63, 4.0)
-      ].sort((a, b) => (a.calories < b.calories ? -1 : 1)),
       page: 0,
       rowsPerPage: 5
     };
@@ -282,7 +355,13 @@ class EnhancedTable extends React.Component {
     const { order, orderBy, selected, rowsPerPage, page } = this.state;
     return (
       <Paper className={classes.root}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar
+          handleAddClick={this.props.handleAddClick}
+          numSelected={selected.length}
+          deleteSelected={this.props.deleteSelected}
+          handleOnSearchChange={this.props.handleOnSearchChange}
+          selected={selected}
+        />
         <div className={classes.tableWrapper}>
           <Table className={classes.table}>
             <EnhancedTableHead
@@ -314,9 +393,11 @@ class EnhancedTable extends React.Component {
                       </TableCell>
                       <TableCell padding="none">{n.firstName}</TableCell>
                       <TableCell numeric>{n.surname}</TableCell>
-                      <TableCell padding="none">{n.dateOfBirth.toString()}</TableCell>
+                      <TableCell padding="none">
+                        {moment(n.dateOfBirth).format('MMMM Do YYYY')}
+                      </TableCell>
                       <TableCell numeric>{n.idNumber}</TableCell>
-                      <TableCell numeric>{n.address}</TableCell>
+                      <TableCell numeric>{n.address.address}</TableCell>
                     </TableRow>
                   );
                 })}
@@ -340,7 +421,10 @@ class EnhancedTable extends React.Component {
 }
 
 EnhancedTable.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  handleAddClick: PropTypes.func.isRequired,
+  deleteSelected: PropTypes.func.isRequired,
+  handleOnSearchChange: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(EnhancedTable);

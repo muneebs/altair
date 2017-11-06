@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2017-present Muneeb Samuels. All Rights Reserved. See License.txt for license information.
+ */
+
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import asyncComponent from './components/AsyncComponent';

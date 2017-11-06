@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2017-present Muneeb Samuels. All Rights Reserved. See License.txt for license information.
+ */
+
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { createMuiTheme, MuiThemeProvider } from 'material-ui/styles';

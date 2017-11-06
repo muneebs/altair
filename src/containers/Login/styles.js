@@ -1,12 +1,5 @@
 /*
- * @flow
- *
- * ScoobyDoo-it (https://www.scoobydoo-it.com/)
- *
- * Copyright © 2017 by ScoobyDoo-it (Pty) Ltd. All Rights Reserved.
- *
- * This file is subject to the terms and conditions defined in file 'LICENSE.txt',
- * which is part of this source code package.
+ * Copyright (c) 2017-present Muneeb Samuels. All Rights Reserved. See License.txt for license information.
  */
 
 const styles = theme => {
