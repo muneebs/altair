@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import { createMuiTheme, MuiThemeProvider } from 'material-ui/styles';
 import Routes from './Routes';
 import 'babel-polyfill';
-import { AppActions, sagaMiddleware, sagas, UserActions } from 'altair-redux';
+import { AppActions, UserActions } from 'altair-redux';
 
 const theme = createMuiTheme();
 
@@ -26,7 +26,6 @@ export default class App extends Component {
     this.setState({ isAuthenticated: authenticated });
   };
   initStore = async () => {
-    sagaMiddleware.run(sagas);
     this.props.store.subscribe(this.onStoreStateChange);
     this.props.store.dispatch(UserActions.getSessionTokenRequest());
     this.props.store.dispatch(AppActions.appInitFinished());

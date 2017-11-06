@@ -8,7 +8,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import App from './App';
 import './index.css';
-import { configureStore } from 'altair-redux';
+import { configureStore, sagaMiddleware, sagas } from 'altair-redux';
 import localForage from 'localforage';
 
 const config = {
@@ -32,6 +32,8 @@ const store = configureStore(
     searchKey: process.env.REACT_APP_ALGOLIA_SEARCH_KEY
   }
 );
+
+sagaMiddleware.run(sagas);
 
 ReactDOM.render(
   <Router>

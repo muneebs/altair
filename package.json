@@ -43,7 +43,8 @@
     "fix":
       "eslint --ignore-path .eslintignore --ignore-pattern \"!**/.*\" --fix .",
     "build": "node ./setup && react-scripts build",
-    "test": "node ./setup && react-scripts test --env=jsdom",
+    "test":
+      "node ./setup && cross-env CI=true react-scripts test --env=jsdom --no-watch",
     "deploy":
       "node ./setup && react-scripts build && npm run delete-maps && firebase deploy",
     "start": "node ./setup && react-scripts start"
@@ -54,6 +55,7 @@
     "babel-plugin-styled-components": "^1.3.0",
     "babel-plugin-transform-export-extensions": "^6.22.0",
     "babel-polyfill": "^6.26.0",
+    "cross-env": "^5.1.1",
     "dotenv": "^4.0.0",
     "dotenv-webpack": "^1.5.4",
     "eslint": "^4.10.0",
