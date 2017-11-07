@@ -47,26 +47,7 @@ create a .firebaserc file with the following contents
 }
 ```
 
-clone the altair-redux repository in a parent folder i.e ../altair-redux
-```
-cd ../ && git clone https://github.com/muneebs/altair-redux.git
-```
-
-```
-cd altair-redux
-npm install
-npm link
-```
-
-```
-cd ../altair
-```
-
-now link the redux project and start the app
-
-```
-npm link altair-redux
-```
+Install the npm packages and start the app.
 
 ```
 npm install
