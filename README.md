@@ -1,4 +1,4 @@
-![logo](./src/assets/logo.png)
+![logo](https://rawgit.com/muneebs/altair/master/src/assets/logo.svg)
 # Altair - Customer manager
 
 Altair is a simple customer management application I built as a coding test for [Redblade Software](http://www.redblade.io).
