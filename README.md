@@ -1,7 +1,7 @@
 ![logo](https://rawgit.com/muneebs/altair/master/src/assets/logo.svg)
 # Altair - Customer manager
 
-Altair is a simple customer management application I built as a coding test for [Redblade Software](http://www.redblade.io).
+Altair is a simple customer management application I built as a coding test.
 
 A working demo is deployed at: [https://altair-e7ed4.firebaseapp.com](https://altair-e7ed4.firebaseapp.com)
 
