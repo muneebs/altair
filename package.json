@@ -10,7 +10,7 @@
     "geofire": "^4.1.2",
     "keycode": "^2.1.9",
     "localforage": "^1.5.3",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.13",
     "material-ui": "next",
     "material-ui-icons": "^1.0.0-beta.17",
     "moment": "^2.19.1",
